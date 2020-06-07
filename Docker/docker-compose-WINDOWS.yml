@@ -1,0 +1,38 @@
+version: '3.1'
+
+services:
+  db_web_commerce:  
+    image: mysql:5.7
+    container_name: db_web_commerce
+    hostname: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=w2e0b2C0omm
+      - MYSQL_DATABASE=dbcommerce
+      - MYSQL_USER=adminWebCommerce
+      - MYSQL_PASSWORD=w2e0b2C0omm
+    restart: unless-stopped
+    ports:
+      - 127.0.0.1:5556:3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+
+  web_ciisa_tpc:
+    build: .
+    container_name: ciisa_tpc_app
+    hostname: ciisa_tpc_app
+    restart: unless-stopped
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      - "8300:80"
+    depends_on:
+      - db_web_commerce
+
+
+
+volumes:
+  mysql-data:
+
+networks:
+  default:
